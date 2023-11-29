@@ -1,0 +1,68 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: fraizy22-poi-gateway-app-dev
+  annotations:
+    argocd/app-name: fraizy22-poi-gateway-app-dev
+    backstage.io/kubernetes-id: fraizy22-poi-gateway-app
+    backstage.io/kubernetes-namespace: fraizy22
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: rhdh23-demo/fraizy22-gateway
+    janus-idp.io/tekton-enabled: 'true'
+  tags:
+    - java
+    - quarkus
+    - maven
+    - workshop
+  links:
+    - url: https://console-openshift-console.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/dev-pipelines/ns/fraizy22/
+      title: Pipelines
+      icon: web
+    - url: https://console-openshift-console.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/k8s/ns/fraizy22/deployments/fraizy22-poi-gateway-app
+      title: Deployment
+      icon: web
+    - url: https://devspaces.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/#https://github.com/rhdh23-demo/fraizy22-gateway?che-editor=che-incubator/che-code/latest&devfilePath=.devfile-vscode.yaml
+      title: OpenShift Dev Spaces (VS Code)
+      icon: web
+spec:
+  type: service
+  lifecycle: production
+  owner: "user:default/fraizy22"
+  system: workshop-system-fraizy22
+  providesApis:
+    - gateway-api-fraizy22
+  consumesApis:
+    - backend-api-fraizy22
+---
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: workshop-system-fraizy22
+  tags:
+    - backstage
+    - janus-idp
+    - openshift
+    - workshop
+    - rh-summit
+spec:
+  owner: "user:default/fraizy22"
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: gateway-api-fraizy22
+  description: API surface exposed to interact with Backends (summit POIs + parks data) via the Gateway
+  links:
+    - url: http://fraizy22-poi-gateway-app-fraizy22.apps.rosa-pzz6v.9nln.p1.openshiftapps.com/q/swagger-ui
+      title: Swagger UI
+      icon: web
+    - url: https://github.com/rhdh23-demo/fraizy22-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
+      title: API Spec
+      icon: code
+spec:
+  type: openapi
+  lifecycle: production
+  owner: "user:default/fraizy22"
+  system: workshop-system-fraizy22
+  definition:
+    $text: https://github.com/rhdh23-demo/fraizy22-gateway/tree/main/src/main/resources/META-INF/openapi.yaml
